@@ -10,3 +10,13 @@ def build_rnn(n_units=100):
         ])
     model.compile(optimizer="sgd", loss="mse", metrics="accuracy")
     return model
+
+
+def build_mlp(n_inputs=60, n_outputs=59, use_activation=False):
+    model = keras.Sequential()
+    model.add(keras.layers.Input(shape=(n_inputs, )))
+    model.add(keras.layers.Dense(units=n_outputs))
+    if use_activation:
+        model.add(keras.layers.ReLU())
+    model.compile(optimizer="sgd", loss="mse", metrics=["mae"])
+    return model
