@@ -3,6 +3,7 @@ humanfriendly
 numpy==1.22.1
 tensorflow
 scikit-learn
+seaborn
 
 # local package
 -e .
