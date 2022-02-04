@@ -3,10 +3,11 @@ and the outputs are other sequences that are pairwise sums of the inputs."""
 import numpy as np
 
 
-def generate_input_batch(batch_size=100, seed=123456):
-    """The input batch is composed by sequences of 60 integers randomly selected between 1 and 9."""
+def generate_input_batch(int_range=(1, 10), sample_size=2, batch_size=100, seed=123456):
+    """The input batch is composed by sequences of sample_size integers randomly selected in int_range
+    (right element excluded)."""
     rng = np.random.default_rng(seed=seed)
-    return rng.integers(1, 10, size=(batch_size, 60))
+    return rng.integers(int_range[0], int_range[1], size=(batch_size, sample_size))
 
 
 def generate_output_batch(input_batch):
