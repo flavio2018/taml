@@ -10,14 +10,15 @@ def pad_output_batch(output_batch):
     return np.concatenate([np.zeros((output_batch.shape[0], 1)), output_batch], axis=1)
 
 
-def one_hot_encode_output(output_batch):
+def one_hot_encode_batch(batch, max_sum=None):
     """Transform a batch of outputs with categorical labels into a batch with one-hot encoded labels."""
     lb = LabelBinarizer()
-    max_sum = max(output_batch)
+    if max_sum is None:
+        max_sum = max(batch.ravel())
     lb.fit(list(range(max_sum + 1)))  # la somma 1 non può esserci
-    new_output_batch = lb.transform(output_batch[0])
-    for i in range(1, output_batch.shape[0]):
-        one_hot_encoded_labels = lb.transform(output_batch[i])
+    new_output_batch = lb.transform(batch[0])
+    for i in range(1, batch.shape[0]):
+        one_hot_encoded_labels = lb.transform(batch[i])
         # print(np.shape(new_output_batch))
         new_output_batch = np.concatenate([new_output_batch, one_hot_encoded_labels])
-    return np.reshape(new_output_batch, (-1, output_batch.shape[1], max_sum + 1))
+    return np.reshape(new_output_batch, (-1, batch.shape[1], max_sum + 1))
