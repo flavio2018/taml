@@ -14,4 +14,5 @@ def plot_confusion_matrix(predictions, targets, filename):
     print(matrix)
     fig, ax = plt.subplots(1, 1, figsize=(6, 6))
     ax = heatmap(matrix, ax=ax)
+    ax.title(filename)
     plt.savefig(f"../reports/figures/{filename}.pdf", format="pdf")
