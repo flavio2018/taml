@@ -11,7 +11,7 @@ def generate_input_batch(int_range=(1, 10), sample_size=2, batch_size=100, seed=
 
 
 def generate_output_batch(input_batch):
-    """Given an input sequence of 60 integers, the inputs are sums of the inputs two by two (e.g. the first two,
+    """Given an input sequence of N integers, the inputs are sums of the inputs two by two (e.g. the first two,
     the second two, etc).
     """
     output_batch = input_batch[:, 0:2].sum(axis=1)
