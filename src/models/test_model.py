@@ -29,7 +29,13 @@ def main(train_name, test_name):
         return
 
     outputs_test = generate_output_batch(inputs_test)
-    inputs_test = one_hot_encode_batch(inputs_test, max_sum=40).reshape((test_batch_size, -1))
+
+    if "raw" in train_name:
+        pass
+    elif "one_hot" in train_name:
+        inputs_test = one_hot_encode_batch(inputs_test, max_sum=40).reshape((test_batch_size, -1))
+    else:
+        print(f"Unexpected train_name: {train_name}.")
 
     predictions = model.predict(inputs_test)
     evaluate_preds(predictions, outputs_test)
