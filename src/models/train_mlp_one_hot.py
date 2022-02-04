@@ -1,38 +1,40 @@
 """This script trains a model on the task."""
-import keras.losses
+import click
 from codetiming import Timer
 from humanfriendly import format_timespan
 
 from src.data.batch_generators import generate_input_batch, generate_output_batch
-from src.data.data_ops import pad_output_batch, one_hot_encode_output
-from src.models.models import build_rnn, build_mlp
+from src.data.data_ops import one_hot_encode_batch
+from src.models.models import build_mlp
+from src.models.metrics import evaluate_preds, plot_confusion_matrix
 
 
+#  https://stackoverflow.com/questions/44232898/memoryerror-in-tensorflow-and-successful-numa-node-read-from-sysfs-had-negativ#44233285
+@click.command()
+@click.option("--train_name", default="mlp_one_hot_1_10")
 @Timer(text=lambda secs: f"Took {format_timespan(secs)}")
-def main():
+def main(train_name):
     batch_size = 1000
     inputs = generate_input_batch(batch_size=batch_size)
     outputs = generate_output_batch(inputs)
 
-    outputs = pad_output_batch(outputs)
-    inputs = one_hot_encode_output(inputs).reshape((batch_size, -1))
-    outputs = one_hot_encode_output(outputs).reshape((batch_size, -1))
-    print(inputs[0], inputs[0].shape)
+    inputs = one_hot_encode_batch(inputs, max_sum=40).reshape((batch_size, -1))
+    # outputs = one_hot_encode_output(outputs).reshape((batch_size, -1))
 
     model = build_mlp(n_inputs=inputs.shape[1], n_outputs=outputs.shape[1])
     model.fit(inputs, outputs, epochs=10, batch_size=1)
 
+    model.save(f"../models/trained/{train_name}")
+
     test_batch_size = 100
-    inputs_test = generate_input_batch(batch_size=test_batch_size, seed=321)
+    inputs_test = generate_input_batch(int_range=(1, 21), batch_size=test_batch_size, seed=321)
     outputs_test = generate_output_batch(inputs_test)
-    inputs_test = one_hot_encode_output(inputs_test).reshape((test_batch_size, -1))
-    outputs_test = pad_output_batch(outputs_test)
-    outputs_test = one_hot_encode_output(outputs_test).reshape((test_batch_size, -1))
+    inputs_test = one_hot_encode_batch(inputs_test, max_sum=40).reshape((test_batch_size, -1))
+    # outputs_test = one_hot_encode_output(outputs_test).reshape((test_batch_size, -1))
 
     predictions = model.predict(inputs_test)
-    print(predictions[0], outputs_test[0])
-    print("MAE:", keras.losses.mae(predictions, outputs_test))
-    print("MSE:", keras.losses.mse(predictions, outputs_test))
+    evaluate_preds(predictions, outputs_test)
+    plot_confusion_matrix(predictions, outputs_test, train_name)
 
 
 if __name__ == "__main__":
