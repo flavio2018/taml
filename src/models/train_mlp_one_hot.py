@@ -26,16 +26,6 @@ def main(train_name):
 
     model.save(f"../models/trained/{train_name}")
 
-    test_batch_size = 100
-    inputs_test = generate_input_batch(int_range=(1, 21), batch_size=test_batch_size, seed=321)
-    outputs_test = generate_output_batch(inputs_test)
-    inputs_test = one_hot_encode_batch(inputs_test, max_sum=40).reshape((test_batch_size, -1))
-    # outputs_test = one_hot_encode_output(outputs_test).reshape((test_batch_size, -1))
-
-    predictions = model.predict(inputs_test)
-    evaluate_preds(predictions, outputs_test)
-    plot_confusion_matrix(predictions, outputs_test, train_name)
-
 
 if __name__ == "__main__":
     main()
