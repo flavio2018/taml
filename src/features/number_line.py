@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 def plot_number_on_line(x, fig, ax, marker="o"):
     ax.scatter(x, 1, color="black", marker=marker)
     fig.tight_layout()
-    fig.savefig("../data/interim/number_line/test.png")
+    return fig, ax
 
 
 def set_background(show_line=True):
@@ -23,6 +23,15 @@ def set_background(show_line=True):
         ax.axhline(1, color="black")
 
     return fig, ax
+
+
+def plot_couple_on_line(couple):
+    fig, ax = set_background()
+    for marker, position in zip(["o", "s"], couple):
+        fig, ax = plot_number_on_line(position, fig, ax, marker)
+    return fig, ax
+    img_name = "_".join(("discriminate", str(couple[0]), str(couple[1])))
+    fig.savefig(f"../data/interim/number_line/{img_name}.png")
 
 
 if __name__ == '__main__':
