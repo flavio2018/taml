@@ -11,7 +11,7 @@ def plot_number_on_line(x, fig, ax, marker="o"):
 
 def set_background(show_line=True):
     px = 1 / plt.rcParams['figure.dpi']  # pixel in inches
-    fig, ax = plt.subplots(1, 1, figsize=(500*px, 50*px))
+    fig, ax = plt.subplots(1, 1, figsize=(530*px, 50*px))
 
     ax.set_xlim(0, 20)
     ax.get_xaxis().set_visible(False)
