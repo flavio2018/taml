@@ -5,7 +5,7 @@ from humanfriendly import format_timespan
 
 from tensorflow import keras
 
-from src.data.batch_generators import generate_input_batch, generate_output_batch
+from src.data.batch_generators import generate_sum_input_batch, generate_sum_output_batch
 from src.data.data_ops import one_hot_encode_batch
 from src.models.metrics import plot_confusion_matrix, evaluate_preds
 
@@ -19,16 +19,16 @@ def main(train_name, test_name):
 
     test_batch_size = 100
     if test_name == "interpolate":
-        inputs_test = generate_input_batch(int_range=(1, 10), batch_size=test_batch_size, seed=321)
+        inputs_test = generate_sum_input_batch(int_range=(1, 10), batch_size=test_batch_size, seed=321)
 
     elif test_name == "extrapolate":
-        inputs_test = generate_input_batch(int_range=(1, 21), batch_size=test_batch_size, seed=321)
+        inputs_test = generate_sum_input_batch(int_range=(1, 21), batch_size=test_batch_size, seed=321)
 
     else:
         print(f"Wrong test_name: {test_name}.")
         return
 
-    outputs_test = generate_output_batch(inputs_test)
+    outputs_test = generate_sum_output_batch(inputs_test)
 
     if "raw" in train_name:
         pass

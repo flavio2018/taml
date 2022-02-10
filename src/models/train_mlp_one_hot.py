@@ -3,7 +3,7 @@ import click
 from codetiming import Timer
 from humanfriendly import format_timespan
 
-from src.data.batch_generators import generate_input_batch, generate_output_batch
+from src.data.batch_generators import generate_sum_input_batch, generate_sum_output_batch
 from src.data.data_ops import one_hot_encode_batch
 from src.models.models import build_mlp
 from src.models.metrics import evaluate_preds, plot_confusion_matrix
@@ -15,8 +15,8 @@ from src.models.metrics import evaluate_preds, plot_confusion_matrix
 @Timer(text=lambda secs: f"Took {format_timespan(secs)}")
 def main(train_name):
     batch_size = 1000
-    inputs = generate_input_batch(batch_size=batch_size)
-    outputs = generate_output_batch(inputs)
+    inputs = generate_sum_input_batch(batch_size=batch_size)
+    outputs = generate_sum_output_batch(inputs)
 
     inputs = one_hot_encode_batch(inputs, max_sum=40).reshape((batch_size, -1))
     # outputs = one_hot_encode_output(outputs).reshape((batch_size, -1))
