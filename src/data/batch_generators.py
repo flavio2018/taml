@@ -34,11 +34,16 @@ def generate_discriminate_input_batch(range=(1, 10), only_int=True, only_these: 
         batch = generate_sum_input_batch(int_range=range, batch_size=batch_size, seed=seed)
 
     if only_int:
-        return batch
+        return _make_couples_one_pt_apart(batch)
     else:
         rng = np.random.default_rng(seed=seed)
         # __ = (range[1] - range[0]) * rng.random(size=(batch_size, 2)) + range[0]  # alternative
-        return batch + rng.random(size=(batch_size, 2))
+        return _make_couples_one_pt_apart(batch) + np.around(rng.random(size=(batch_size, 2)), 1)
+
+
+def _make_couples_one_pt_apart(batch_of_couples):
+    rows = batch_of_couples.shape[0]
+    return np.concatenate([np.zeros((rows, 1)), np.ones((rows, 1))], axis=1) + batch_of_couples
 
 
 def generate_discriminate_output_batch(inputs):
@@ -54,6 +59,6 @@ def generate_discriminate_output_batch(inputs):
 
 
 if __name__ == '__main__':
-    input_batch = generate_discriminate_input_batch(only_int=True, only_these=[1, 3, 5, 7])
+    input_batch = generate_discriminate_input_batch(range=(1, 50), only_int=False)
     print(input_batch)
     print(generate_discriminate_output_batch(input_batch))
