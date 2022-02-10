@@ -13,7 +13,7 @@ def set_background(show_line=True):
     px = 1 / plt.rcParams['figure.dpi']  # pixel in inches
     fig, ax = plt.subplots(1, 1, figsize=(530*px, 50*px))
 
-    ax.set_xlim(0, 20)
+    ax.set_xlim(0.9, 50.1)
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
     for pos in ['right', 'top', 'bottom', 'left']:
@@ -30,8 +30,6 @@ def plot_couple_on_line(couple):
     for marker, position in zip(["o", "s"], couple):
         fig, ax = plot_number_on_line(position, fig, ax, marker)
     return fig, ax
-    img_name = "_".join(("discriminate", str(couple[0]), str(couple[1])))
-    fig.savefig(f"../data/interim/number_line/{img_name}.png")
 
 
 if __name__ == '__main__':
