@@ -42,6 +42,7 @@ def generate_discriminate_input_batch(range=(1, 10), only_int=True, only_these: 
 
 
 def _make_couples_one_pt_apart(batch_of_couples):
+    """Ensure that random generated couples are at least one pt apart."""
     rows = batch_of_couples.shape[0]
     return np.concatenate([np.zeros((rows, 1)), np.ones((rows, 1))], axis=1) + batch_of_couples
 
@@ -55,7 +56,13 @@ def generate_discriminate_output_batch(inputs):
             output_batch.append(True)
         else:
             output_batch.append(False)
-    return np.array(output_batch)
+    return np.array(output_batch).astype(int)
+
+
+def _write_batch(batch, file):
+    for sample in batch:
+        file.write(" ".join([str(digit) for digit in sample]))  # sample is an array of 59 digits
+        file.write("\n")
 
 
 if __name__ == '__main__':
